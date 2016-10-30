@@ -1,0 +1,1 @@
+# mcaddons-json-schema
