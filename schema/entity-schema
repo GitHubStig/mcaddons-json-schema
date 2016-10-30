@@ -1,0 +1,1970 @@
+{
+  "title": "JSON schema for Minecraft server entities .json files",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  // definitions
+  "definitions": {
+    "string-or-array-of-string": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "value-or-range-min-max": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "range_min": {
+              "type": "number"
+            },
+            "range_max": {
+              "type": "number"
+            }
+          }
+        }
+      ]
+    },
+    "feedItems": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "item": {
+                "type": "string"
+              },
+              "temperMod": {
+                "type": "integer"
+              },
+              "growth": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "minecraft:breedable:breedsWith": {
+      "type": "object",
+      "properties": {
+        "mateType": {
+          "type": "string"
+        },
+        "babyType": {
+          "type": "string"
+        },
+        "breed_event": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "minecraft:damage_sensor:on_damage": {
+      "type": "object",
+      "properties": {
+        "on_damage": {
+          "type": "object",
+          "properties": {
+            "filters": {
+              "type": "object",
+              "properties": {
+                "other_with_families": {
+                  "$ref": "#/definitions/string-or-array-of-string"
+                },
+                "with_damage_fatal": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "deals_damage": {
+          "type": "boolean"
+        },
+        "event": {
+          "type": "string"
+        }
+      }
+    },
+    "minecraft:rideable:seats": {
+      "type": "object",
+      "properties": {
+        "position": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "min_rider_count": {
+          "type": "integer"
+        },
+        "max_rider_count": {
+          "type": "integer"
+        },
+        "rotate_rider_by": {
+          "type": "integer"
+        },
+        "lock_rider_rotation": {
+          "type": "integer"
+        }
+      }
+    },
+    "minecraft:interact": {
+      "type": "object",
+      "properties": {
+        "on_interact": {
+          "type": "object",
+          "properties": {
+            "filters": {
+              "type": "object",
+              "properties": {
+                "other_with_item": {
+                  "$ref": "#/definitions/string-or-array-of-string"
+                },
+                "other_with_families": {
+                  "$ref": "#/definitions/string-or-array-of-string"
+                }
+              }
+            }
+          }
+        },
+        "use_item": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          ]
+        },
+        "transform_to_item": {
+          "type": "string"
+        },
+        "play_sounds": {
+          "type": "string"
+        },
+        "interact_text": {
+          "type": "string"
+        }
+      }
+    },
+    // components
+    "components": {
+      "type": "object",
+      "properties": {
+        "minecraft:identifier": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:collision_box": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number"
+            },
+            "height": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:projectile": {
+          "type": "object",
+          "properties": {
+            "onHit": {
+              "type": "object",
+              "properties": {
+                "grant_xp": {
+                  "type": "object",
+                  "properties": {
+                    "minXP": {
+                      "type": "integer"
+                    },
+                    "maxXP": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "remove_on_hit": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "power": {
+              "type": "number"
+            },
+            "gravity": {
+              "type": "number"
+            },
+            "uncertaintyBase": {
+              "type": "number"
+            },
+            "uncertaintyMultiplier": {
+              "type": "integer"
+            },
+            "anchor": {
+              "type": "integer"
+            },
+            "offset": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "inertia": {
+              "type": "number"
+            },
+            "reflectOnHurt": {
+              "type": "boolean"
+            },
+            "catchFire": {
+              "type": "boolean"
+            },
+            "semirandomdiffdamage": {
+              "type": "boolean"
+            },
+            "particle": {
+              "type": "string"
+            },
+            "angleoffset": {
+              "type": "number"
+            },
+            "shootSound": {
+              "type": "string"
+            },
+            "hitSound": {
+              "type": "string"
+            },
+            "liquid_inertia": {
+              "type": "number"
+            },
+            "shoottarget": {
+              "type": "boolean"
+            },
+            "isdangerous": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:type_family": {
+          "type": "object",
+          "properties": {
+            "family": {
+              "$ref": "#/definitions/string-or-array-of-string"
+            }
+          }
+        },
+        "minecraft:fall_damage": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:movement": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "#ref": "#/definitions/value-or-range-min-max"
+            },
+            "max": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:health": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/definitions/value-or-range-min-max"
+            },
+            "max": {
+              "type": "integer"
+            },
+            "min": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:nameable": {
+          "type": "object",
+          "properties": {
+            "alwaysShow": {
+              "type": "boolean"
+            },
+            "allowNameTagRenaming": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:loot": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:attack": {
+          "type": "object",
+          "properties": {
+            "damage": {
+              "$ref": "#/definitions/value-or-range-min-max"
+            },
+            "effect_name": {
+              "type": "string"
+            },
+            "effect_duration": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:follow_range": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:hurt_when_wet": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:fire_immune": {
+          "type": "boolean"
+        },
+        "minecraft:behavior.nearest_attackable_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "entity_types": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "filters": {
+                    "type": "object",
+                    "properties": {
+                      "other_with_families": {
+                        "$ref": "#/definitions/string-or-array-of-string"
+                      }
+                    }
+                  },
+                  "max_dist": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "must_see": {
+              "type": "boolean"
+            },
+            "attack_interval": {
+              "type": "integer"
+            },
+            "attack_interval_min": {
+              "type": "number"
+            },
+            "must_reach": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:behavior.melee_attack": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "max_dist": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "random_stop_interval": {
+              "type": "number"
+            },
+            "track_target": {
+              "type": "boolean"
+            },
+            "reach_multiplier": {
+              "type": "number"
+            },
+            "target_dist": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:shooter": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "def": {
+              "type": "string"
+            },
+            "auxVal": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.ranged_attack": {
+          "type": "object",
+          "properties": {
+            "attack_interval_min": {
+              "type": "number"
+            },
+            "attack_interval_max": {
+              "type": "number"
+            },
+            "charge_charged_trigger": {
+              "type": "number"
+            },
+            "charge_shoot_trigger": {
+              "type": "number"
+            },
+            "attack_radius": {
+              "type": "number"
+            },
+            "burst_shots": {
+              "type": "integer"
+            },
+            "burst_interval": {
+              "type": "number"
+            },
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "attack_interval": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.random_stroll": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "xz_dist": {
+              "type": "number"
+            },
+            "speed_modifier": {
+              "type": "number"
+            },
+            "y_dist": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.random_look_around": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "look_distance": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:rideable": {
+          "type": "object",
+          "properties": {
+            "seat_count": {
+              "type": "integer"
+            },
+            "interact_text": {
+              "type": "string"
+            },
+            "seats": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/minecraft:rideable:seats"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/minecraft:rideable:seats"
+                  }
+                }
+              ]
+            },
+            "family_types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "priority": {
+              "type": "integer"
+            },
+            "crouching_skip_interact": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:is_stackable": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:addrider": {
+          "type": "object",
+          "properties": {
+            "entity_type": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:environment_sensor": {
+          "type": "object",
+          "properties": {
+            "on_environment": {
+              "type": "object",
+              "properties": {
+                "filters": {
+                  "type": "object",
+                  "properties": {
+                    "with_environment_any": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "event": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:on_target_acquired": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:behavior.leap_at_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "yd": {
+              "type": "number"
+            },
+            "must_be_on_ground": {
+              "type": "boolean"
+            },
+            "target_dist": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:angry": {
+          "type": "object",
+          "properties": {
+            "duration": {
+              "type": "number"
+            },
+            "broadcastAnger": {
+              "type": "boolean"
+            },
+            "broadcastRange": {
+              "type": "integer"
+            },
+            "calm_event": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.float": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.mount_pathing": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "target_dist": {
+              "type": "number"
+            },
+            "track_target": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:behavior.look_at_player": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "look_distance": {
+              "type": "number"
+            },
+            "probability": {
+              "type": "number"
+            },
+            "target_distance": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.hurt_by_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "not_entity_types": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "entity_types": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "filters": {
+                    "type": "object",
+                    "properties": {
+                      "other_without_families": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "alert_same_type": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:is_baby": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:scale": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:ageable": {
+          "type": "object",
+          "properties": {
+            "duration": {
+              "type": "number"
+            },
+            "feedItems": {
+              "$ref": "#/definitions/feedItems"
+            },
+            "grow_up": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            },
+            "threshold": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.follow_parent": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "speed_modifier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:breedable": {
+          "type": "object",
+          "properties": {
+            "requireTame": {
+              "type": "boolean"
+            },
+            "breedsWith": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/minecraft:breedable:breedsWith"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/minecraft:breedable:breedsWith"
+                  }
+                }
+              ],
+              "breedItems": {
+                "#ref": "#/definitions/string-or-array-of-string"
+              },
+              "inheritTamed": {
+                "type": "boolean"
+              },
+              "mutation_factor": {
+                "type": "object",
+                "properties": {
+                  "variant": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.breed": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "speed_modifier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.move_towards_restriction": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "control_flags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "speed_modifier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:leashable": {
+          "type": "object",
+          "properties": {
+            "soft_distance": {
+              "type": "number"
+            },
+            "hard_distance": {
+              "type": "number"
+            },
+            "max_distance": {
+              "type": "number"
+            },
+            "on_leash": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            },
+            "on_unleash": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.panic": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.tempt": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "within_radius": {
+              "type": "integer"
+            },
+            "can_get_scared": {
+              "type": "boolean"
+            },
+            "speed_modifier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:interact": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/minecraft:interact"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/minecraft:interact"
+              }
+            }
+          ]
+        },
+        "minecraft:explode": {
+          "type": "object",
+          "properties": {
+            "fuseLength": {
+              "$ref": "#/definitions/value-or-range-min-max"
+            },
+            "fuseLit": {
+              "type": "boolean"
+            },
+            "power": {
+              "type": "integer"
+            },
+            "causesFire": {
+              "type": "boolean"
+            },
+            "maxResistance": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:is_charged": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:damage_sensor": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/minecraft:damage_sensor:on_damage"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/minecraft:damage_sensor:on_damage"
+              }
+            }
+          ]
+        },
+        "minecraft:target_nearby_sensor": {
+          "type": "object",
+          "properties": {
+            "inside_range": {
+              "type": "number"
+            },
+            "outside_range": {
+              "type": "number"
+            },
+            "on_inside_range": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            },
+            "on_outside_range": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.swell": {
+          "type": "object",
+          "properties": {
+            "start_distance": {
+              "type": "number"
+            },
+            "stop_distance": {
+              "type": "number"
+            },
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.avoid_mob_type": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "entity_types": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "filters": {
+                    "type": "object",
+                    "properties": {
+                      "other_with_families": {
+                        "$ref": "#/definitions/string-or-array-of-string"
+                      }
+                    }
+                  },
+                  "max_dist": {
+                    "type": "integer"
+                  },
+                  "walk_speed_multiplier": {
+                    "type": "number"
+                  },
+                  "sprint_speed_multiplier": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minecraft:on_target_escape": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:scale_by_age": {
+          "type": "object",
+          "properties": {
+            "start_scale": {
+              "type": "number"
+            },
+            "end_scale": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.run_around_like_crazy": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:tamemount": {
+          "type": "object",
+          "properties": {
+            "minTemper": {
+              "type": "integer"
+            },
+            "maxTemper": {
+              "type": "integer"
+            },
+            "feed_text": {
+              "type": "string"
+            },
+            "ride_text": {
+              "type": "string"
+            },
+            "feedItems": {
+              "$ref": "#/definitions/feedItems"
+            },
+            "autoRejectItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "item": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "tame_event": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.player_ride_tamed": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:inventory": {
+          "type": "object",
+          "properties": {
+            "inventory_size": {
+              "type": "integer"
+            },
+            "container_type": {
+              "type": "string"
+            },
+            "can_be_siphoned_from": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:is_chested": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:horse.jump_strength": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "$ref": "#/definitions/value-or-range-min-max"
+            }
+          }
+        },
+        "minecraft:healable": {
+          "type": "object",
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "item": {
+                        "type": "string"
+                      },
+                      "heal_amount": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "minecraft:lookat": {
+          "type": "object",
+          "properties": {
+            "searchRadius": {
+              "type": "number"
+            },
+            "setTarget": {
+              "type": "boolean"
+            },
+            "filters": {
+              "type": "object",
+              "properties": {
+                "other_with_families": {
+                  "$ref": "#/definitions/string-or-array-of-string"
+                },
+                "other_without_armor": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minecraft:teleport": {
+          "type": "object",
+          "properties": {
+            "randomTeleports": {
+              "type": "boolean"
+            },
+            "maxRandomTeleportTime": {
+              "type": "integer"
+            },
+            "randomTeleportCube": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "targetDistance": {
+              "type": "integer"
+            },
+            "lightTeleportChance": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.enderman_leave_block": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.enderman_take_block": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.guardian_attack": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:timer": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "looping": {
+              "type": "boolean"
+            },
+            "time_down_event": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:monster": {
+          "type": "object",
+          "properties": {}
+        },
+        "breathable": {
+          "type": "object",
+          "properties": {
+            "breathesWater": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:is_tamed": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:transformation": {
+          "type": "object",
+          "properties": {
+            "into": {
+              "type": "string"
+            },
+            "delay": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "integer"
+                    },
+                    "block_assist_chance": {
+                      "type": "number"
+                    },
+                    "block_radius": {
+                      "type": "integer"
+                    },
+                    "block_chance": {
+                      "type": "number"
+                    },
+                    "block_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "minecraft:is_saddled": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:equippable": {
+          "type": "object",
+          "properties": {
+            "slots": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "item": {
+                    "type": "string"
+                  },
+                  "on_equip": {
+                    "type": "object",
+                    "properties": {
+                      "event": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "on_unequip": {
+                    "type": "object",
+                    "properties": {
+                      "event": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.defend_village_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.move_towards_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "within_radius": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.move_through_village": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "only_at_night": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:behavior.offer_flower": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:burns_in_daylight": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "default": {}
+        },
+        "minecraft:behavior.slime_float": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.slime_attack": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.slime_random_direction": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.slime_keep_on_jumping": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:rail_movement": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:rail_sensor": {
+          "type": "object",
+          "properties": {
+            "eject_on_activate": {
+              "type": "boolean"
+            },
+            "on_activate": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                }
+              }
+            },
+            "on_deactivate": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:item_hopper": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:is_ignited": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:npc": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:variant": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:tameable": {
+          "type": "object",
+          "properties": {
+            "probability": {
+              "type": "number"
+            },
+            "tameItems": {
+              "$ref": "#/definitions/string-or-array-of-string"
+            },
+            "tame_event": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:sittable": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:behavior.follow_owner": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "start_distance": {
+              "type": "integer"
+            },
+            "stop_distance": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.stay_while_sitting": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.ocelot_sit_on_block": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:attack_damage": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.ocelotattack": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "walk_speed_multiplier": {
+              "type": "number"
+            },
+            "sprint_speed_multiplier": {
+              "type": "number"
+            },
+            "sneak_speed_multiplier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:boostable": {
+          "type": "object",
+          "properties": {
+            "speed_multiplier": {
+              "type": "number"
+            },
+            "duration": {
+              "type": "number"
+            },
+            "boost_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "item": {
+                    "type": "string"
+                  },
+                  "item_damage": {
+                    "type": "integer"
+                  },
+                  "replaceItem": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "minecraft:item_controllable": {
+          "type": "object",
+          "properties": {
+            "control_items": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:behavior.controlled_by_player": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:player.saturation": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:player.exhaustion": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:player.level": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:player.experience": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:breathable": {
+          "type": "object",
+          "properties": {
+            "totalSupply": {
+              "type": "integer"
+            },
+            "suffocateTime": {
+              "type": "integer"
+            },
+            "generatesBubbles": {
+              "type": "boolean"
+            },
+            "breathesAir": {
+              "type": "boolean"
+            },
+            "breathesWater": {
+              "type": "boolean"
+            }
+          }
+        },
+        "minecraft:behavior.rabbit_panic": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_modifier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:behavior.raid_garden": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "blocks": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "search_range": {
+              "type": "integer"
+            },
+            "goal_radius": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:is_dyeable": {
+          "type": "object",
+          "properties": {
+            "interact_text": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:is_sheared": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:color": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.eat_block": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "on_eat": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "minecraft:behavior.silverfish_wake_up_friends": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.silverfish_merge_with_stone": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:equipment": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:behavior.restrict_sun": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.flee_sun": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "speed_multiplier": {
+              "type": "number"
+            }
+          }
+        },
+        "minecraft:is_trap": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:behavior.squid_move_away_from_ground": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.squid_flee": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.squid_idle": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.squid_dive": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.squid_out_of_water": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.wither_random_attack_pos_goal": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:wither_target_highest_damage": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.look_at_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.owner_hurt_by_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.owner_hurt_target": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:on_calm": {
+          "type": "object",
+          "properties": {
+            "event": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            }
+          }
+        },
+        "minecraft:behavior.beg": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            },
+            "look_distance": {
+              "type": "number"
+            },
+            "look_time": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "minecraft:player_ride_tamed": {
+          "type": "object",
+          "properties": {}
+        },
+        "minecraft:zombie.spawn_reinforcements": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        },
+        "minecraft:behavior.break_door": {
+          "type": "object",
+          "properties": {
+            "priority": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "minecraft:entity": {
+      "type": "object",
+      "properties": {
+        "format_version": {
+          "type": "number"
+        },
+        "component_groups": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/components"
+          }
+        },
+        "components": {
+          "$ref": "#/definitions/components"
+        },
+        "events": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    }
+  }
+}
