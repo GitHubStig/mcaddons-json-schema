@@ -10,7 +10,7 @@ https://code.visualstudio.com/docs/languages/json#_json-schemas-settings).
 
 ### TODO
 - [ ] server/entities
-  - [ ] components
+  - [x] components
   - [ ] events
 - [ ] server/loot_tables
 - [ ] client/models
