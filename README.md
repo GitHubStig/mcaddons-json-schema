@@ -9,9 +9,9 @@ To set up [Visual Studio Code](https://code.visualstudio.com) to use the schemas
 https://code.visualstudio.com/docs/languages/json#_json-schemas-settings). 
 
 ### TODO
-- [ ] server/entities
+- [x] server/entities
   - [x] components
-  - [ ] events
+  - [x] events
 - [ ] server/loot_tables
 - [ ] client/models
 

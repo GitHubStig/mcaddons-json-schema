@@ -34,6 +34,102 @@
         }
       ]
     },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "with_environment_any": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "with_components": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "without_components": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "other_with_item": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "other_with_components": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "other_with_families": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "other_without_components": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "other_without_armor": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "other_without_families": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "target_with_families": {
+          "$ref": "#/definitions/string-or-array-of-string"
+        },
+        "with_damage_fatal": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "events-add": {
+      "type": "object",
+      "properties": {
+        "component_groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "events-remove": {
+      "type": "object",
+      "properties": {
+        "component_groups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "events-randomize": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "weight": {
+            "type": "integer"
+          },
+          "filters": {
+            "$ref": "#/definitions/filters"
+          },
+          "remove": {
+            "$ref": "#/definitions/events-remove"
+          },
+          "add": {
+            "$ref": "#/definitions/events-add"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "events-sequence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "filters": {
+            "$ref": "#/definitions/filters"
+          },
+          "randomize": {
+            "$ref": "#/definitions/events-randomize"
+          }
+        }
+      }
+    },
     "feedItems": {
       "anyOf": [
         {
@@ -87,15 +183,7 @@
           "type": "object",
           "properties": {
             "filters": {
-              "type": "object",
-              "properties": {
-                "other_with_families": {
-                  "$ref": "#/definitions/string-or-array-of-string"
-                },
-                "with_damage_fatal": {
-                  "type": "boolean"
-                }
-              }
+              "$ref": "#/definitions/filters"
             }
           }
         },
@@ -137,15 +225,7 @@
           "type": "object",
           "properties": {
             "filters": {
-              "type": "object",
-              "properties": {
-                "other_with_item": {
-                  "$ref": "#/definitions/string-or-array-of-string"
-                },
-                "other_with_families": {
-                  "$ref": "#/definitions/string-or-array-of-string"
-                }
-              }
+              "$ref": "#/definitions/filters"
             }
           }
         },
@@ -384,12 +464,7 @@
                 "type": "object",
                 "properties": {
                   "filters": {
-                    "type": "object",
-                    "properties": {
-                      "other_with_families": {
-                        "$ref": "#/definitions/string-or-array-of-string"
-                      }
-                    }
+                    "$ref": "#/definitions/filters"
                   },
                   "max_dist": {
                     "type": "integer"
@@ -576,12 +651,7 @@
               "type": "object",
               "properties": {
                 "filters": {
-                  "type": "object",
-                  "properties": {
-                    "with_environment_any": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/definitions/filters"
                 },
                 "event": {
                   "type": "string"
@@ -703,12 +773,7 @@
                 "type": "object",
                 "properties": {
                   "filters": {
-                    "type": "object",
-                    "properties": {
-                      "other_without_families": {
-                        "type": "string"
-                      }
-                    }
+                    "$ref": "#/definitions/filters"
                   }
                 }
               }
@@ -1020,12 +1085,7 @@
                 "type": "object",
                 "properties": {
                   "filters": {
-                    "type": "object",
-                    "properties": {
-                      "other_with_families": {
-                        "$ref": "#/definitions/string-or-array-of-string"
-                      }
-                    }
+                    "$ref": "#/definitions/filters"
                   },
                   "max_dist": {
                     "type": "integer"
@@ -1182,18 +1242,7 @@
               "type": "boolean"
             },
             "filters": {
-              "type": "object",
-              "properties": {
-                "other_with_families": {
-                  "$ref": "#/definitions/string-or-array-of-string"
-                },
-                "other_without_armor": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
+              "$ref": "#/definitions/filters"
             }
           }
         },
@@ -1941,6 +1990,424 @@
           }
         }
       }
+    },
+    // events
+    "events": {
+      "type": "object",
+      "properties": {
+        "minecraft:entity_spawned": {
+          "type": "object",
+          "properties": {
+            "randomize": {
+              "$ref": "#/definitions/events-randomize"
+            },
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            },
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            }
+          }
+        },
+        "minecraft:become_hostile": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:become_neutral": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:become_angry": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_calm": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "from_egg": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:entity_born": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            },
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            }
+          }
+        },
+        "minecraft:ageable_grow_up": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_leash": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_unleash": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            }
+          }
+        },
+        "minecraft:entity_transformed": {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            },
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:start_exploding": {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            }
+          }
+        },
+        "minecraft:stop_exploding": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:become_charged": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_tame": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            },
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            }
+          }
+        },
+        "minecraft:on_chest": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:explode": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:target_too_close": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:target_far_enough": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:horse_saddled": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:horse_unsaddled": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            }
+          }
+        },
+        "minecraft:from_player": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:from_village": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:hopper_activate": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:hopper_deactivate": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_prime": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "become_cow": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "become_zombie": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_saddled": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "in_desert": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "in_snow": {
+          "type": "object",
+          "properties": {
+            "randomize": {
+              "$ref": "#/definitions/events-randomize"
+            }
+          }
+        },
+        "grow_up": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "leash": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "unleash": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            }
+          }
+        },
+        "minecraft:on_sheared": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:on_eat_block": {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            }
+          }
+        },
+        "set_trap": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "spring_trap": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "change_to_skeleton": {
+          "type": "object",
+          "properties": {
+            "sequence": {
+              "$ref": "#/definitions/events-sequence"
+            }
+          }
+        },
+        "from_explosion": {
+          "type": "object",
+          "properties": {
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        },
+        "minecraft:ageable_set_baby": {
+          "type": "object",
+          "properties": {
+            "remove": {
+              "$ref": "#/definitions/events-remove"
+            },
+            "add": {
+              "$ref": "#/definitions/events-add"
+            }
+          }
+        }
+      }
     }
   },
   "type": "object",
@@ -1961,8 +2428,7 @@
           "$ref": "#/definitions/components"
         },
         "events": {
-          "type": "object",
-          "properties": {}
+          "$ref": "#/definitions/events"
         }
       }
     }
